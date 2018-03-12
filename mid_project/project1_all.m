@@ -9,6 +9,7 @@ im = double(im);
 
 % Show the image
 figure; imshow(im,[]); title('Original image');
+print('Original_image', '-depsc');
 
 % Patch dimensions [height, width]
 patch_size = [6 6];
@@ -42,7 +43,14 @@ test_patches = all_patches(:,permutation(num_train_patches+1:num_train_patches+n
 D_DCT = build_dct_unitary_dictionary(patch_size);
 
 % Show the unitary DCT dictionary
+
+% For the report
 figure(2);
+show_dictionary(D_DCT);
+title('Unitary DCT Dictionary');
+print('Unitary_DCT_Dictionary', '-depsc');
+
+figure(3);
 subplot(1,2,1); show_dictionary(D_DCT);
 title('Unitary DCT Dictionary');
  
@@ -79,19 +87,26 @@ T = 20;
     unitary_dictionary_learning(train_patches, D_DCT, T, K);
  
 % Show the dictionary
-figure(2);
+figure(3);
 subplot(1,2,2); show_dictionary(D_learned);
 title('Learned Unitary Dictionary');
+
+% For the report
+figure(4);
+show_dictionary(D_learned);
+title('Learned Unitary Dictionary');
+print('Learned_Unitary_Dictionary','-depsc');
  
 % Show the representation error and the cardinality as a function of the
 % learning iterations
-figure(3);
+figure(5);
 subplot(1,2,1); plot(1:T, mean_error, 'linewidth', 2);
 ylabel('Average Representation Error');
 xlabel('Learning Iteration');
 subplot(1,2,2); plot(1:T, mean_cardinality, 'linewidth', 2);
 ylabel('Average Number of Non-Zeros'); ylim([K-1 K+1]);
 xlabel('Learning Iteration');
+print('Average_MSE_Non-Zeros_vs_Iterations', '-depsc');
  
 % Compute the representation of each signal that belong to the training set
 % using Thresholding
