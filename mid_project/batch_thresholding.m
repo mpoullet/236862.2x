@@ -18,51 +18,35 @@ function [X, A] = batch_thresholding(D, Y, K)
 % The solution is returned in the matrix A, along with the denoised signals
 % given by  X = DA.
 
-
-% TODO: Compute the inner products between the dictionary atoms and the
+% Compute the inner products between the dictionary atoms and the
 % input patches (hint: the result should be a matrix of size n X N)
-% Write your code here... inner_products = ???;
+inner_products = D'*Y;
 
+% Compute the absolute value of the inner products
+abs_inner_products = abs(inner_products);
 
- 
-% TODO: Compute the absolute value of the inner products
-% Write your code here... abs_inner_products = ???;
-
-
- 
-% TODO: Sort the absolute value of the inner products in a descend order.
+% Sort the absolute value of the inner products in a descend order.
 % Notice that one can sort each column independently
-% Write your code here... mat_sorted = sort(?, ?, ?);
+mat_sorted = sort(abs_inner_products, 'descend');
 
-
-
-% TODO: Compute the threshold value per patch, by picking the K largest
+% Compute the threshold value per patch, by picking the K largest
 % entry in each column of 'mat_sorted'
-% Write your code here... vec_thresh = mat_sorted(?,?);
-
-
+vec_thresh = mat_sorted(K,:);
 
 % Replicate the vector of thresholds and create a matrix of the same size 
 % as 'inner_products'
 mat_thresh = repmat(vec_thresh, [size(abs_inner_products,1) 1]);
 
-% TODO: Given the thresholds, initialize the matrix of coeffecients to be 
+% Given the thresholds, initialize the matrix of coefficients to be 
 % equal to 'inner_products' matrix
-% Write your code here... A = ???;
+A = inner_products;
 
-
-
-% TODO: Set the entries in A that are smaller than 'mat_thresh'
+% Set the entries in A that are smaller than 'mat_thresh'
 % (in absolute value) to zero
-% Write your code here... A( ??? ) = 0;
-
-
+A(abs(A)<mat_thresh) = 0;
 
 % Use 'sparse' format for the resulting sparse vectors
 A = sparse(A);
  
-% TODO: Compute the estimated patches given their representations in 'A'
-% Write your code here... X = ???;
-
-
-
+% Compute the estimated patches given their representations in 'A'
+X = D*A;
