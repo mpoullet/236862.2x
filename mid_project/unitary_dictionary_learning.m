@@ -46,7 +46,7 @@ for iter = 1 : num_iterations
     % and 'Y' contains the training examples. Use the Procrustes algorithm.
 
     % See Section 2, slide 80
-    [U,S,V] = svd(A*Y');
+    [U,~,V] = svd(A*Y');
     D = V*U';
 end
 
