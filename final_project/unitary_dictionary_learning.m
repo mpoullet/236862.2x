@@ -18,8 +18,7 @@ function [D, mean_error, mean_cardinality] = ...
 %   mean_cardinality - A vector, containing the average number of nonzeros,
 %                      computed per iteration and averaged over the total 
 %                      training examples
-   
- 
+
 % Allocate a vector that stores the average representation
 % error per iteration
 mean_error = zeros(num_iterations,1);
@@ -27,11 +26,9 @@ mean_error = zeros(num_iterations,1);
 % Allocate a vector that stores the average cardinality per iteration
 mean_cardinality = zeros(num_iterations,1);
  
-% TODO: Set the dictionary to be D_init
-% Write your code here... D = ???;
+% Set the dictionary to be D_init
+D = D_init;
 
-
- 
 % Run the Procrustes analysis algorithm for num_iterations
 for iter = 1 : num_iterations
     
@@ -42,18 +39,15 @@ for iter = 1 : num_iterations
     fprintf('Iter %02d: ', iter);
     [mean_error(iter), mean_cardinality(iter)] = ...
         compute_stat(X, Y, A);
- 
-    % TODO: Update the dictionary via Procrustes analysis.
+
+    % Update the dictionary via Procrustes analysis.
     % Solve D = argmin_D || Y - DA ||_F^2 s.t. D'D = I,
     % where 'A' is a matrix that contains all the estimated coefficients,
     % and 'Y' contains the training examples. Use the Procrustes algorithm.
-    % Write your code here... D = ???;
 
-    
-    
-    
+    % See Section 2, slide 80
+    [U,~,V] = svd(A*Y');
+    D = V*U';
 end
- 
- 
+
 end
- 
