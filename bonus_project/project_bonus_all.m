@@ -28,6 +28,22 @@ title('Original');
 subplot(1,3,2); imshow(y,[]);
 title(['Input: PSNR = ' num2str(psnr_input)]);
 
+% For the report
+figure(3);
+imshow(orig_im,[]);
+title('Original');
+print('Original_image', '-depsc');
+
+figure(4);
+imshow(blurred_im,[]);
+title('Blurred');
+print('Blurred_image', '-depsc');
+
+figure(5);
+imshow(y,[]);
+title(['Blurred and noisy: PSNR = ' num2str(psnr_input)]);
+print('Blurred_and_noisy', '-depsc');
+
 %% Part B: Deblurring via Regualrization by Denoising (RED)
 
 % In this part we aim to tackle the image deblurring problem.
@@ -137,8 +153,15 @@ figure(1);
 subplot(1,3,3); imshow(x, []);
 title(['RED: PSNR = ' num2str(psnr_red(end))]);
 
+% For the report
+figure(6);
+imshow(x, []);
+title(['RED: PSNR = ' num2str(psnr_red(end))]);
+print('RED_reconstructed_image', '-depsc');
+
 % Plot the PSNR of the RED as a function of the iterations
-figure(3); plot(1:K, psnr_red); grid on;
+figure(2); plot(1:K, psnr_red); grid on;
 title('RED: PSNR vs. Iterations');
 ylabel('PSNR');
 xlabel('Fixed-Point Iteration');
+print('PSNR_vs_Iterations', '-depsc');
