@@ -12,50 +12,36 @@ function [X, A] = batch_thresholding(D, Y, epsilon)
 % The solution is returned in the matrix A, containing the representations 
 % of the patches as its columns, along with the denoised signals
 % given by  X = DA.
+
+% Get the number of atoms
+[n,~] = size(D);
+
+% Get the number of patches
+[~,N] = size(Y);
  
- 
- 
-% TODO: Get the number of atoms
-% Write your code here... n = ???;
-
-
-
-% TODO: Get the number of patches
-% Write your code here... N = ???;
-
-
- 
-% TODO: Compute the inner products between the dictionary atoms and the
+% Compute the inner products between the dictionary atoms and the
 % input patches (hint: the result should be a matrix of size n X N)
-% Write your code here... inner_products = ???;
+inner_products = D'*Y;
 
-
- 
 % Compute epsilon^2, which is the square residual error allowed per patch
 epsilon_sq = epsilon^2;
  
 % Compute the square value of each entry in 'inner_products' matrix
 residual_sq = inner_products.^2;
  
-% TODO: Sort each column in 'residual_sq' matrix in ascending order
-% Write your code here... [mat_sorted, mat_inds] = sort(?, ?, ?);
-
-
+% Sort each column in 'residual_sq' matrix in ascending order
+[mat_sorted, mat_inds] = sort(residual_sq, 'ascend');
  
-% TODO: Compute the cumulative sums for each column of 'mat_sorted'
+% Compute the cumulative sums for each column of 'mat_sorted'
 % and save the result in the matrix 'accumulate_residual'
-% Write your code here... accumulate_residual = ???;
+accumulate_residual = cumsum(mat_sorted);
 
-
- 
 % Compute the indices of the dominant coefficients that we want to keep
 inds_to_keep = (accumulate_residual > epsilon_sq);
  
-% TODO: Allocate a matrix of size n X N to save the sparse vectors
-% Write your code here... A = ???;
+% Allocate a matrix of size n X N to save the sparse vectors
+A = zeros(n,N);
 
-
- 
 % In what follows we compute the location of each non-zero to be assigned 
 % to the matrix of the sparse vectors A. To this end, we need to map 
 % 'mat_inds' to a linear subscript format. The mapping will be done using 
@@ -74,17 +60,12 @@ linear_inds = linear_inds(:);
 % in the matrix 'A' using the precomputed 'linear_inds' vector
 linear_inds_to_keep = linear_inds(inds_to_keep(:));
  
-% TODO: Assign to 'A' the coefficients in 'inner_products' using
+% Assign to 'A' the coefficients in 'inner_products' using
 % the precomputed vector 'linear_inds_to_keep'
-% Write your code here... A( ??? ) = inner_products( ??? );
+A(linear_inds_to_keep) = inner_products(linear_inds_to_keep);
 
-
- 
 % Use 'sparse' format for the resulting sparse vectors
 A = sparse(A);
  
-% TODO: Reconstruct the patches using 'A' matrix
-% Write your code here... X = ???;
-
-
- 
+% Reconstruct the patches using 'A' matrix
+X = D*A;
