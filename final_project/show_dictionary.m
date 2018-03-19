@@ -12,7 +12,7 @@ all_mats = [];
 
 for c1 = 1 : n_images
     D = D((c1 - 1) * each_D_size + (1 : each_D_size) , :);
-    
+
     n_atoms = size(D , 2);
 
     % Adding borders between the atoms
@@ -20,19 +20,20 @@ for c1 = 1 : n_images
     in_inds = (1 : atom_size);
     out_inds = repmat((0 : block_size - 1) * (block_size + 1) , block_size , 1) + repmat((1 : block_size)' , 1 , block_size); out_inds = out_inds(:);
     D2 = zeros((block_size + 1) .^ 2 , n_atoms);
-    
+
     D2(out_inds , :) = D(in_inds , :);
     remInds = setdiff((1 : size(D2 , 1)) , out_inds);
     D2(remInds , :) = -1;
     block_size = block_size + 1;
 
     Dict = D2;
-    
+
     r = round(n_atoms .^ 0.5); c = r;
 
     final_mat = zeros([r c] * block_size);
-    
-    t1 = reshape(Dict(:) , block_size , []); % In this matrix, every blocks adjacent rows (no overlaps) are one block
+
+    % In this matrix, every blocks adjacent rows (no overlaps) are one block
+    t1 = reshape(Dict(:) , block_size , []);
 
     inds = (1 : c * block_size);
     for t = 1 : r
@@ -53,9 +54,8 @@ for c1 = 1 : n_images
     else
         all_mats = [all_mats ; barrier ; final_mat];
     end
-    
-end
 
+end
 
 rng = max(abs(D(:))); rng = min(rng * 1.1 , 1);
 

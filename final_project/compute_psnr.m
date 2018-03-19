@@ -20,4 +20,3 @@ mse_val = 1/numel(y_original) * norm(y_original-y_estimated).^2;
 psnr_val = 10*log10(dynamic_range^2 / mse_val);
 
 end
-
