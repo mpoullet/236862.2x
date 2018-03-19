@@ -1,6 +1,5 @@
 clear; clc; close all;
 
-
 %% Part A: Data Construction
 
 % Read an image
@@ -29,7 +28,6 @@ title('Original');
 subplot(1,3,2); imshow(y,[]);
 title(['Input: PSNR = ' num2str(psnr_input)]);
 
-
 %% Part B: Deblurring via Regualrization by Denoising (RED)
 
 % In this part we aim to tackle the image deblurring problem.
@@ -41,21 +39,16 @@ title(['Input: PSNR = ' num2str(psnr_input)]);
 % the update rule is given by
 % x_new = [1/sigma^2 H'*H + lambda*I]^(-1) * [1/sigma^2 * H'*y + lambda * f(x)]
 
-
 % Choose the parameters of the DCT denoiser
 
 % Set the patch dimensions [height, width]
 patch_size = [6 6];
 
-% TODO: Create a unitary DCT dictionary
-% Write your code here D = build_dct_unitary_dictionary( ? );
+% Create a unitary DCT dictionary
+D = build_dct_unitary_dictionary(patch_size);
 
-
-
-% TODO: Set the noise-level in a PATCH for the pursuit
-% Write your code here... epsilon = ???;
-
-
+% Set the noise-level in a PATCH for the pursuit
+epsilon = 6*sigma;
 
 % Set the number of outer FP iterations
 K = 50;
@@ -81,12 +74,10 @@ for outer_iter = 1:K
 
     % Stage 1:
     
-    % TODO: Compute fx = f(x_prev), by running our DCT image denoising 
+    % Compute fx = f(x_prev), by running our DCT image denoising 
     % algorithm
-    % Write your code here... fx = dct_image_denoising(?, ?, ?);
+    fx = dct_image_denoising(x, D, epsilon);
 
-    
-    
     % Stage 2:
     
     % Solve the linear system Az=b, where
@@ -95,12 +86,10 @@ for outer_iter = 1:K
     % where its update rule is given by
     % z_new = z_old - mu*(A*z_old - b)
     
-    % TODO: Initialize the the previous solution 'z_old' of the Richardson
+    % Initialize the the previous solution 'z_old' of the Richardson
     % method to be the denoised image 'fx'
-    % Write your code here... z_old = ???;
+    z_old = fx;
 
-    
-    
     % Compute b = 1/sigma^2*H'y + lambda*x. The multiplication
     % by H or H' is done by filtering the image we operate on with
     % 'h_blur'. Notice that H is symmetric, therefore the multiplication by
@@ -109,49 +98,37 @@ for outer_iter = 1:K
     b = 1/sigma^2 * HT_y + lambda*fx;
 
     % Repeat z_new = z_old - step_size*(A*z_old - b) for num_inner_iters
+    step_size = 1;
     for inner_iter = 1:T
 
-        % TODO: Compute H*z_old by convolving the image 'z_old' with the 
+        % Compute H*z_old by convolving the image 'z_old' with the 
         % filter 'h_blur'
-        % Write your code here... H_z_old = ???;
+        H_z_old = imfilter(z_old,h_blur,'circular');
         
-        
-
-        % TODO: Compute H'*H_z_old by convolving the image 'H_z_old' with 
+        % Compute H'*H_z_old by convolving the image 'H_z_old' with 
         % the filter 'h_blur' (in our case H is symmetric)
-        % Write your code here... HTH_z_old = ???;
+        HTH_z_old = imfilter(H_z_old,h_blur,'circular');
         
-        
-
-        % TODO: Compute the image A*z_old which is nothing but
+        % Compute the image A*z_old which is nothing but
         % 1/sigma^2*H'*H*z_old + lambda*z_old
-        % Write your code here... A_z_old = ???;
+        A_z_old = 1/sigma^2*HTH_z_old + lambda*z_old;
         
+        % Compute z_new = z_old - step_size*(A*z_old - b)
+        z_new = z_old - step_size*(A_z_old - b);
         
-
-        % TODO: Compute z_new = z_old - step_size*(A*z_old - b)
-        % Write your code here... z_new = ???;
+        % Update z_old to be the new z
+        z_old = z_new;
         
-        
-
-        % TODO: Update z_old to be the new z
-        % Write your code here... z_old = ???;
-        
-        
-
     end
 
-    % TODO: Update x to be z_new
-    % Write your code here... x = ???;
+    % Update x to be z_new
+    x = z_new;
     
-    
-
     % Compute the PSNR of the restored image
     psnr_red(outer_iter) = compute_psnr(orig_im, x);
     fprintf('RED: Fixed-Point Iter %02d, PSNR %.3f\n\n', ...
         outer_iter, psnr_red(outer_iter));
 end
-
 
 %% Present the results
 
@@ -165,4 +142,3 @@ figure(3); plot(1:K, psnr_red); grid on;
 title('RED: PSNR vs. Iterations');
 ylabel('PSNR');
 xlabel('Fixed-Point Iteration');
-
