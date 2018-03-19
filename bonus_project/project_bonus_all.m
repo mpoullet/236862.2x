@@ -48,7 +48,7 @@ patch_size = [6 6];
 D = build_dct_unitary_dictionary(patch_size);
 
 % Set the noise-level in a PATCH for the pursuit
-epsilon = 6*sigma;
+epsilon = sqrt(1.1)*6*sigma;
 
 % Set the number of outer FP iterations
 K = 50;
