@@ -26,11 +26,22 @@ psnr_noisy = compute_psnr(orig_im, noisy_im);
 fprintf('PSNR of the noisy image is %.3f\n\n\n', psnr_noisy);
 
 % Show the original and noisy images
-figure (1);
+figure(1);
 subplot(2,2,1); imshow(orig_im,[]);
 title('Original');
 subplot(2,2,2); imshow(noisy_im,[]);
 title(['Noisy, PSNR = ' num2str(psnr_noisy)]);
+
+% For the report
+figure(4);
+imshow(orig_im,[]);
+title('Original');
+print('Cropped_Barbara_image', '-depsc');
+
+figure(5);
+imshow(noisy_im,[]);
+title(['Noisy, PSNR = ' num2str(psnr_noisy)]);
+print('Noisy_Barbara_image', '-depsc');
 
 %% Part B: Patch-Based Image Denoising
  
@@ -43,7 +54,7 @@ D_DCT = build_dct_unitary_dictionary(patch_size);
 % Show the unitary DCT dictionary
 figure(2);
 subplot(1,2,1); show_dictionary(D_DCT);
-title('Unitary DCT Dictioanry');
+title('Unitary DCT Dictionary');
 
 %% Part B-1: Unitary DCT denoising
  
@@ -62,6 +73,12 @@ fprintf('DCT dictionary: PSNR %.3f\n\n\n', psnr_dct);
 figure(1);
 subplot(2,2,3); imshow(est_dct,[]);
 title(['DCT: \epsilon = ' num2str(epsilon_dct) ' PSNR = ' num2str(psnr_dct)]);
+
+% For the report
+figure(6);
+imshow(est_dct,[]);
+title(['DCT: \epsilon = ' num2str(epsilon_dct) ' PSNR = ' num2str(psnr_dct)]);
+print('DCT_reconstructed_image', '-depsc');
  
 %% Part B-2: Unitary dictionary learning for image denoising
  
@@ -80,7 +97,13 @@ epsilon_learning = epsilon_dct;
 % Show the dictionary
 figure(2);
 subplot(1,2,2); show_dictionary(D_learned);
-title('Learned Unitary Dictioanry');
+title('Learned Unitary Dictionary');
+
+% For the report
+figure(7);
+show_dictionary(D_learned);
+title('Learned Unitary Dictionary');
+print('Learned Unitary Dictionary', '-depsc');
 
 % Show the representation error and the cardinality as a function of the
 % learning iterations
@@ -93,6 +116,9 @@ subplot(1,2,2); plot(1:T, mean_cardinality, 'linewidth', 2);
 ylabel('Average Number of Non-Zeros');
 xlabel('Learning Iteration');
 
+% For the report
+print('Average_Representation_Error_and_Cardinality', '-depsc');
+
 % Compute and print the PSNR
 psnr_unitary = compute_psnr(orig_im, est_learning);
 fprintf('Unitary dictionary: PSNR %.3f\n\n\n', psnr_unitary);
@@ -101,6 +127,12 @@ fprintf('Unitary dictionary: PSNR %.3f\n\n\n', psnr_unitary);
 figure(1);
 subplot(2,2,4); imshow(est_learning,[]);
 title(['Unitary: \epsilon = ' num2str(epsilon_learning) ' PSNR = ' num2str(psnr_unitary)]);
+
+% For the report
+figure(8);
+imshow(est_learning,[]);
+title(['Unitary: \epsilon = ' num2str(epsilon_learning) ' PSNR = ' num2str(psnr_unitary)]);
+print('Procrustes_reconstructed_image', '-depsc');
 
 %% SOS Boosting
 
