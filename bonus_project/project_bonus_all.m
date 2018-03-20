@@ -114,7 +114,6 @@ for outer_iter = 1:K
     b = 1/sigma^2 * HT_y + lambda*fx;
 
     % Repeat z_new = z_old - step_size*(A*z_old - b) for num_inner_iters
-    step_size = 1;
     for inner_iter = 1:T
 
         % Compute H*z_old by convolving the image 'z_old' with the 
@@ -130,7 +129,7 @@ for outer_iter = 1:K
         A_z_old = 1/sigma^2*HTH_z_old + lambda*z_old;
         
         % Compute z_new = z_old - step_size*(A*z_old - b)
-        z_new = z_old - step_size*(A_z_old - b);
+        z_new = z_old - mu*(A_z_old - b);
         
         % Update z_old to be the new z
         z_old = z_new;
