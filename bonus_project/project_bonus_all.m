@@ -44,7 +44,7 @@ imshow(y,[]);
 title(['Blurred and noisy: PSNR = ' num2str(psnr_input)]);
 print('Blurred_and_noisy', '-depsc');
 
-%% Part B: Deblurring via Regualrization by Denoising (RED)
+%% Part B: Deblurring via Regularization by Denoising (RED)
 
 % In this part we aim to tackle the image deblurring problem.
 % To this end, we will use RED, suggest minimizing
