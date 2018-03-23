@@ -103,7 +103,7 @@ title('Learned Unitary Dictionary');
 figure(7);
 show_dictionary(D_learned);
 title('Learned Unitary Dictionary');
-print('Learned Unitary Dictionary', '-depsc');
+print('Learned_Unitary_Dictionary', '-depsc');
 
 % Show the representation error and the cardinality as a function of the
 % learning iterations
@@ -163,4 +163,9 @@ est_learning_sos = est_learning_sos - rho*est_learning;
 psnr_unitary_sos = compute_psnr(orig_im, est_learning_sos);
 fprintf('SOS Boosting: epsilon %.3f, rho %.2f, PSNR %.3f\n\n\n', ...
     epsilon_sos, rho, psnr_unitary_sos);
- 
+
+% For the report
+figure(9);
+imshow(est_learning_sos,[]);
+title(['Unitary SOS: \epsilon = ' num2str(epsilon_sos) ' PSNR = ' num2str(psnr_unitary_sos)]);
+print('SOS_reconstructed_image', '-depsc');
