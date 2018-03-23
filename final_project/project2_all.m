@@ -33,15 +33,15 @@ subplot(2,2,2); imshow(noisy_im,[]);
 title(['Noisy, PSNR = ' num2str(psnr_noisy)]);
 
 % For the report
-figure(4);
+fg4= figure(4);
 imshow(orig_im,[]);
 title('Original');
-print('Cropped_Barbara_image', '-depsc');
+print(fg4, 'Cropped_Barbara_image', '-depsc');
 
-figure(5);
+fg5 = figure(5);
 imshow(noisy_im,[]);
 title(['Noisy, PSNR = ' num2str(psnr_noisy)]);
-print('Noisy_Barbara_image', '-depsc');
+print(fg5, 'Noisy_Barbara_image', '-depsc');
 
 %% Part B: Patch-Based Image Denoising
  
@@ -75,10 +75,10 @@ subplot(2,2,3); imshow(est_dct,[]);
 title(['DCT: \epsilon = ' num2str(epsilon_dct) ' PSNR = ' num2str(psnr_dct)]);
 
 % For the report
-figure(6);
+fg6 = figure(6);
 imshow(est_dct,[]);
 title(['DCT: \epsilon = ' num2str(epsilon_dct) ' PSNR = ' num2str(psnr_dct)]);
-print('DCT_reconstructed_image', '-depsc');
+print(fg6, 'DCT_reconstructed_image', '-depsc');
  
 %% Part B-2: Unitary dictionary learning for image denoising
  
@@ -100,10 +100,10 @@ subplot(1,2,2); show_dictionary(D_learned);
 title('Learned Unitary Dictionary');
 
 % For the report
-figure(7);
+fg7 = figure(7);
 show_dictionary(D_learned);
 title('Learned Unitary Dictionary');
-print('Learned_Unitary_Dictionary', '-depsc');
+print(fg7, 'Learned_Unitary_Dictionary', '-depsc');
 
 % Show the representation error and the cardinality as a function of the
 % learning iterations
@@ -129,10 +129,10 @@ subplot(2,2,4); imshow(est_learning,[]);
 title(['Unitary: \epsilon = ' num2str(epsilon_learning) ' PSNR = ' num2str(psnr_unitary)]);
 
 % For the report
-figure(8);
+fg8 = figure(8);
 imshow(est_learning,[]);
 title(['Unitary: \epsilon = ' num2str(epsilon_learning) ' PSNR = ' num2str(psnr_unitary)]);
-print('Procrustes_reconstructed_image', '-depsc');
+print(fg8, 'Procrustes_reconstructed_image', '-depsc');
 
 %% SOS Boosting
 
@@ -165,7 +165,7 @@ fprintf('SOS Boosting: epsilon %.3f, rho %.2f, PSNR %.3f\n\n\n', ...
     epsilon_sos, rho, psnr_unitary_sos);
 
 % For the report
-figure(9);
+fg9 = figure(9);
 imshow(est_learning_sos,[]);
 title(['Unitary SOS: \epsilon = ' num2str(epsilon_sos) ' PSNR = ' num2str(psnr_unitary_sos)]);
-print('SOS_reconstructed_image', '-depsc');
+print(fg9, 'SOS_reconstructed_image', '-depsc');
