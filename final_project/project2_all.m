@@ -14,7 +14,7 @@ seed = 7;
 
 % Set a fixed random seed to reproduce the results
 rng(seed);
- 
+
 % Set the standard-deviation of the Gaussian noise
 sigma = 20;
 
@@ -44,10 +44,10 @@ title(['Noisy, PSNR = ' num2str(psnr_noisy)]);
 print(fg5, 'Noisy_Barbara_image', '-depsc');
 
 %% Part B: Patch-Based Image Denoising
- 
+
 % Set the patch dimensions [height, width]
 patch_size = [10 10];
- 
+
 % Create a unitary DCT dictionary
 D_DCT = build_dct_unitary_dictionary(patch_size);
 
@@ -57,18 +57,18 @@ subplot(1,2,1); show_dictionary(D_DCT);
 title('Unitary DCT Dictionary');
 
 %% Part B-1: Unitary DCT denoising
- 
+
 % Set the noise-level of a PATCH for the pursuit,
 % multiplied by some constant (e.g. sqrt(1.1)) to improve the restoration
 epsilon_dct = sqrt(1.1)*10*sigma;
- 
+
 % Denoise the input image via the DCT transform
 est_dct = dct_image_denoising(noisy_im, D_DCT, epsilon_dct);
- 
+
 % Compute and print the PSNR
 psnr_dct = compute_psnr(orig_im, est_dct);
 fprintf('DCT dictionary: PSNR %.3f\n\n\n', psnr_dct);
- 
+
 % Show the resulting image
 figure(1);
 subplot(2,2,3); imshow(est_dct,[]);
@@ -79,9 +79,9 @@ fg6 = figure(6);
 imshow(est_dct,[]);
 title(['DCT: \epsilon = ' num2str(epsilon_dct) ' PSNR = ' num2str(psnr_dct)]);
 print(fg6, 'DCT_reconstructed_image', '-depsc');
- 
+
 %% Part B-2: Unitary dictionary learning for image denoising
- 
+
 % Set the number of training iterations for the learning algorithm
 T = 20;
 
@@ -140,15 +140,15 @@ print(fg8, 'Procrustes_reconstructed_image', '-depsc');
 % Typical choice, 0<rho<=1
 rho = 1;
 
-% Set the noise-level in a PATCH for the pursuit. 
-% A common choice is a slightly higher noise-level than the one set 
+% Set the noise-level in a PATCH for the pursuit.
+% A common choice is a slightly higher noise-level than the one set
 % in epsilon_learning, e.g. 1.1*epsilon_learning;
 epsilon_sos = 1.1*epsilon_learning;
 
-% Init D_sos to be D_learned 
+% Init D_sos to be D_learned
 D_sos = D_learned;
 
-% Compute the signal-strengthen image by adding to 'noisy_im' the 
+% Compute the signal-strengthen image by adding to 'noisy_im' the
 % denoised image 'est_learning', multiplied by an appropriate 'rho'
 s_im = noisy_im + rho*est_learning;
 

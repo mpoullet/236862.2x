@@ -10,7 +10,7 @@ function DCT = build_dct_unitary_dictionary(patch_size)
 %% Make sure that the patch is square
 
 if (patch_size(1) ~= patch_size(2))
-    error('This only works for square patches'); 
+    error('This only works for square patches');
 end
 
 nAtoms = prod(patch_size);

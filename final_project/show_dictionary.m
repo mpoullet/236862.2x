@@ -59,7 +59,7 @@ end
 
 rng = max(abs(D(:))); rng = min(rng * 1.1 , 1);
 
-% figure; 
+% figure;
 multSize = floor(600 / size(all_mats , 1));
 all_mats = imresize(all_mats , multSize , 'nearest');
 imshow(all_mats , [-rng rng]);

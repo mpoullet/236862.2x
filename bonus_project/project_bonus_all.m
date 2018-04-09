@@ -89,19 +89,19 @@ x = y;
 for outer_iter = 1:K
 
     % Stage 1:
-    
-    % Compute fx = f(x_prev), by running our DCT image denoising 
+
+    % Compute fx = f(x_prev), by running our DCT image denoising
     % algorithm
     fx = dct_image_denoising(x, D, epsilon);
 
     % Stage 2:
-    
+
     % Solve the linear system Az=b, where
     % A = 1/sigma^2*H'H + lambda*I, and b = 1/sigma^2*H'y + lambda*x.
     % This is done using the (iterative) Richardson method,
     % where its update rule is given by
     % z_new = z_old - mu*(A*z_old - b)
-    
+
     % Initialize the the previous solution 'z_old' of the Richardson
     % method to be the denoised image 'fx'
     z_old = fx;
@@ -116,29 +116,29 @@ for outer_iter = 1:K
     % Repeat z_new = z_old - step_size*(A*z_old - b) for num_inner_iters
     for inner_iter = 1:T
 
-        % Compute H*z_old by convolving the image 'z_old' with the 
+        % Compute H*z_old by convolving the image 'z_old' with the
         % filter 'h_blur'
         H_z_old = imfilter(z_old,h_blur,'circular');
-        
-        % Compute H'*H_z_old by convolving the image 'H_z_old' with 
+
+        % Compute H'*H_z_old by convolving the image 'H_z_old' with
         % the filter 'h_blur' (in our case H is symmetric)
         HTH_z_old = imfilter(H_z_old,h_blur,'circular');
-        
+
         % Compute the image A*z_old which is nothing but
         % 1/sigma^2*H'*H*z_old + lambda*z_old
         A_z_old = 1/sigma^2*HTH_z_old + lambda*z_old;
-        
+
         % Compute z_new = z_old - step_size*(A*z_old - b)
         z_new = z_old - mu*(A_z_old - b);
-        
+
         % Update z_old to be the new z
         z_old = z_new;
-        
+
     end
 
     % Update x to be z_new
     x = z_new;
-    
+
     % Compute the PSNR of the restored image
     psnr_red(outer_iter) = compute_psnr(orig_im, x);
     fprintf('RED: Fixed-Point Iter %02d, PSNR %.3f\n\n', ...

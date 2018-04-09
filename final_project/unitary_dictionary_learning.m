@@ -1,10 +1,10 @@
 function [D, mean_error, mean_cardinality] = ...
     unitary_dictionary_learning(Y, D_init, num_iterations, pursuit_param)
-% UNITARY_DICTIONARY_LEARNING Train a unitary dictionary via 
+% UNITARY_DICTIONARY_LEARNING Train a unitary dictionary via
 % Procrustes analysis.
 %
 % Inputs:
-%   Y              - A matrix that contains the training patches 
+%   Y              - A matrix that contains the training patches
 %                    (as vectors) as its columns
 %   D_init         - Initial UNITARY dictionary
 %   num_iterations - Number of dictionary updates
@@ -13,28 +13,28 @@ function [D, mean_error, mean_cardinality] = ...
 % Outputs:
 %   D          - The trained UNITARY dictionary
 %   mean_error - A vector, containing the average representation error,
-%                computed per iteration and averaged over the total 
+%                computed per iteration and averaged over the total
 %                training examples
 %   mean_cardinality - A vector, containing the average number of nonzeros,
-%                      computed per iteration and averaged over the total 
+%                      computed per iteration and averaged over the total
 %                      training examples
 
 % Allocate a vector that stores the average representation
 % error per iteration
 mean_error = zeros(num_iterations,1);
- 
+
 % Allocate a vector that stores the average cardinality per iteration
 mean_cardinality = zeros(num_iterations,1);
- 
+
 % Set the dictionary to be D_init
 D = D_init;
 
 % Run the Procrustes analysis algorithm for num_iterations
 for iter = 1 : num_iterations
-    
+
     % Compute the representation of each noisy patch
     [X, A] = batch_thresholding(D, Y, pursuit_param);
-    
+
     % Compute and display the statistics
     fprintf('Iter %02d: ', iter);
     [mean_error(iter), mean_cardinality(iter)] = ...
